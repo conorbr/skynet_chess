@@ -143,34 +143,79 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
   bottom of the board it turns into a Queen (this should be handled where the move is actually being made and not in this
   method).
 */
-private Stack getWhitePawnSquares(int x, int y, String piece){
-    Square startingSquare = new Square(x, y, piece);
-    Stack moves = new Stack();
-    Move validM;
-    int tmpy1 = y+2;
-    int true1 = 1;
+private Stack<Move> getWhitePawnSquares(int x, int y, String piece) {
+		Square startingSquare = new Square(x, y, piece);
+		Stack<Move> moves = new Stack<Move>();
+		Move validM, validM2, validM3, validM4;
+		int tmpx1 = x + 1;
+		int tmpx2 = x - 1;
+		int tmpy1 = y + 1;
+		int tmpy2 = y - 1;
+    // initial moves allows for two squares
+		int tmpy3 = y + 2;
 
-    if((startY == 1)){
+		if (!(x < 0 || x > 7 || y < 0 || y > 7)) {
+			Square tmp3 = new Square(x, tmpy3, piece);
+			Square tmp = new Square(x, tmpy1, piece);
+			Square takePiece1 = new Square(tmpx2, tmpy1, piece);
+			Square takePiece2 = new Square(tmpx1, tmpy1, piece);
+			if (y == 1) {
+				validM = new Move(startingSquare, tmp3);
+				if (!piecePresent(((tmp3.getXC() * 75) + 20), (((tmp3.getYC() * 75) + 20)))) {
+					if (!piecePresent(((tmp.getXC() * 75) + 20), (((tmp.getYC() * 75) + 20)))) {
+						moves.push(validM);
+					}
+				}
+			}
+			if (!piecePresent(((tmp.getXC() * 75) + 20), (((tmp.getYC() * 75) + 20)))) {
+				validM2 = new Move(startingSquare, tmp);
+				if (!(tmpy1 > 7)) {
+					moves.push(validM2);
+				}
+			}
+			if (piecePresent(((takePiece1.getXC() * 75) + 20), (((takePiece1.getYC() * 75) + 20)))) {
+				validM3 = new Move(startingSquare, takePiece1);
+				if (!((tmpx2 < 0) || (tmpx1 > 7))) {
+					moves.push(validM3);
+				}
+			}
+			if (piecePresent(((takePiece2.getXC() * 75) + 20), (((takePiece2.getYC() * 75) + 20)))) {
+				validM4 = new Move(startingSquare, takePiece2);
+				if (!((tmpx2 < 0) || (tmpx1 > 7))) {
+					moves.push(validM4);
+				}
+			}
+		}
+		return moves;
+	}
 
-      Square tmp = new Square(x, tmpy1, piece);
+	private Stack<Move> getWhitePawnAttackingSquares(int x, int y, String piece) {
+		Square startingSquare = new Square(x, y, piece);
+		Stack<Move> moves = new Stack<Move>();
+		Move validM3, validM4;
+		int tmpx1 = x + 1;
+		int tmpx2 = x - 1;
+		int tmpy1 = y + 1;
 
-      if(!(tmpy1 > 7)){
-        if(checkSurroundingSquares(tmp)){
-          validM = new Move(startingSquare, tmp);
-          if(!piecePresent(((tmp.getXC()*75)+20), (((tmp.getYC()*75)+20)))){
-            moves.push(validM);
-          }
-          else{
-            if(checkWhiteOponent(((tmp.getXC()*75)+20), (((tmp.getYC()*75)+20)))){
-              moves.push(validM);
-            }
-          }
-        }
-      }
-    }
+		if (!(x < 0 || x > 7 || y < 0 || y > 7)) {
+			Square takePiece1 = new Square(tmpx2, tmpy1, piece);
+			Square takePiece2 = new Square(tmpx1, tmpy1, piece);
+			if (!piecePresent(((takePiece1.getXC() * 75) + 20), (((takePiece1.getYC() * 75) + 20)))) {
+				validM3 = new Move(startingSquare, takePiece1);
+				if (!((tmpx2 < 0) || (tmpx1 > 7))) {
+					moves.push(validM3);
+				}
+			}
+			if (!piecePresent(((takePiece2.getXC() * 75) + 20), (((takePiece2.getYC() * 75) + 20)))) {
+				validM4 = new Move(startingSquare, takePiece2);
+				if (!((tmpx2 < 0) || (tmpx1 > 7))) {
+					moves.push(validM4);
+				}
+			}
+		}
+		return moves;
+}
 
-    return moves;
-  } // end of the method getKingSquares()
 
 
 
